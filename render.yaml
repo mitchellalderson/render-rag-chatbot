@@ -74,7 +74,7 @@ services:
         fromService:
           type: web
           name: rag-chatbot-backend
-          property: hostWithProtocol
+          envVarKey: RENDER_EXTERNAL_URL
 
 databases:
   - name: rag-chatbot-db

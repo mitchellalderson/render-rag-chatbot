@@ -1,6 +1,16 @@
 # RAG Chatbot Backend
 
-TypeScript Express.js backend for the RAG-powered chatbot application.
+Production-ready TypeScript/Express.js backend for the RAG-powered chatbot application with OpenAI integration, PostgreSQL vector database, and automatic migrations.
+
+## 🎯 Key Features
+
+- ✅ **Complete RAG Pipeline** - Query embedding, vector search, context building, and AI response generation
+- ✅ **Conversation Management** - Persistent multi-turn conversations with full history
+- ✅ **Document Ingestion** - Automatic chunking and embedding generation
+- ✅ **Vector Search** - Fast semantic similarity search using PostgreSQL + pgvector
+- ✅ **Source Citations** - Track and return which documents informed each response
+- ✅ **Automatic Migrations** - Database schema automatically set up on deployment
+- ✅ **Production Ready** - Docker support, error handling, health checks
 
 ## Architecture
 
@@ -74,14 +84,22 @@ Optional (with defaults):
 
 ### 4. Run Database Migrations
 
+Migrations create all necessary tables, indexes, and extensions (including pgvector).
+
 ```bash
 npm run db:migrate
 ```
 
+**Note:** In production (Docker/Render), migrations run automatically via the `start.sh` script.
+
 ### 5. (Optional) Seed Sample Data
 
 ```bash
+# Seed basic documents
 npm run db:seed
+
+# Generate embeddings for seeded documents
+npm run db:seed:embeddings
 ```
 
 ### 6. Start Development Server
@@ -95,8 +113,19 @@ Server runs with hot reload at `http://localhost:3001`
 ### Production Build
 
 ```bash
+# Build TypeScript to JavaScript
 npm run build
+
+# Start production server
 npm start
+```
+
+**Note:** In Docker, the `start.sh` script handles both migrations and server startup:
+```bash
+# Runs automatically in container
+./start.sh
+# 1. Runs migrations: node dist/db/migrate.js
+# 2. Starts server: node dist/index.js
 ```
 
 ## API Reference
@@ -257,34 +286,96 @@ The application implements a complete Retrieval Augmented Generation (RAG) pipel
 5. **Response Generation** - Generate contextual AI response using GPT-4/3.5
 6. **Conversation Storage** - Persist messages with source citations
 
-## Current Status
+## 🚀 Production Deployment
 
+### Docker Deployment
+
+The backend includes production-ready Docker configuration with automatic migrations.
+
+**Build and run:**
+```bash
+# From repository root
+docker build -f backend/Dockerfile -t rag-backend .
+docker run -p 3001:3001 --env-file backend/.env rag-backend
+```
+
+**What happens on container startup:**
+1. `start.sh` script runs automatically
+2. Database migrations execute (`node dist/db/migrate.js`)
+3. Server starts (`node dist/index.js`)
+
+### Deploy to Render.com
+
+Configured in root `render.yaml`:
+- Automatic deployments from Git
+- Managed PostgreSQL with pgvector
+- Auto-scaling and health checks
+- Environment variable management
+
+See root `README.md` for detailed deployment instructions.
+
+### Environment Variables for Production
+
+**Required:**
+```env
+NODE_ENV=production
+PORT=3001
+OPENAI_API_KEY=sk-...
+DB_HOST=your-db-host
+DB_PORT=5432
+DB_NAME=rag_chatbot
+DB_USER=your-db-user
+DB_PASSWORD=your-db-password
+```
+
+**Optional (with defaults):**
+```env
+CORS_ORIGIN=https://your-frontend.com
+DB_POOL_MAX=20
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+OPENAI_CHAT_MODEL=gpt-4-turbo-preview
+OPENAI_TEMPERATURE=0.7
+OPENAI_MAX_TOKENS=1000
+SIMILARITY_THRESHOLD=0.2
+MAX_SOURCES=5
+```
+
+## 📊 Current Status
+
+**Implemented:**
 - [x] Vector database integration (PostgreSQL + pgvector)
 - [x] Conversation persistence with history
 - [x] Document storage with metadata
 - [x] OpenAI embedding model integration (text-embedding-3-small)
 - [x] OpenAI LLM integration (GPT-4 Turbo / GPT-3.5)
-- [x] Document ingestion with automatic embedding and chunking
+- [x] Document ingestion with automatic embedding
 - [x] Complete end-to-end RAG pipeline
+- [x] Docker production deployment
+- [x] Automatic database migrations
+- [x] Health check endpoint
+- [x] Error handling and validation
+- [x] Token usage tracking
+
+**Roadmap:**
 - [ ] Authentication & authorization
-- [ ] Rate limiting
-- [ ] Caching layer
+- [ ] Rate limiting and quotas
+- [ ] Response caching layer
 - [ ] WebSocket support for streaming responses
+- [ ] Alternative model providers (Anthropic, Cohere)
+- [ ] Vector index optimization
+- [ ] Monitoring and observability
 
-## OpenAI Integration
+## 📚 Additional Documentation
 
-See [OPENAI_INTEGRATION.md](./OPENAI_INTEGRATION.md) for detailed guide on:
-- Setting up OpenAI API keys
-- Choosing embedding and chat models
-- Cost optimization strategies
-- API usage examples
-- Troubleshooting
+- [OPENAI_INTEGRATION.md](./OPENAI_INTEGRATION.md) - OpenAI setup, model selection, and cost optimization
+- [SETUP.md](./SETUP.md) - PostgreSQL and pgvector installation guide
+- [DOCKER.md](./DOCKER.md) - Docker development and deployment details
 
-## Next Steps
+## 🤝 Contributing
 
-1. **Add Authentication**: Implement user authentication and API keys
-2. **Rate Limiting**: Add request throttling and quotas
-3. **Caching**: Cache embeddings and responses for efficiency
-4. **Streaming**: Add WebSocket support for streaming responses
-5. **Monitoring**: Add logging and metrics for usage tracking
-6. **Alternative Providers**: Support Anthropic Claude, Cohere, or local models
+Contributions welcome! Areas for improvement:
+- Authentication system
+- Rate limiting implementation
+- Caching strategies
+- Alternative model providers
+- Performance optimizations

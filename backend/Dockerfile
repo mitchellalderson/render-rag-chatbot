@@ -35,11 +35,15 @@ RUN npm ci --omit=dev --verbose && npm cache clean --force
 # Copy compiled backend from builder
 COPY --from=builder /app/backend/dist ./backend/dist
 
+# Copy startup script
+COPY backend/start.sh ./backend/start.sh
+RUN chmod +x ./backend/start.sh
+
 # Set working directory to backend
 WORKDIR /app/backend
 
 # Expose the application port
 EXPOSE 3001
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application with migration
+CMD ["./start.sh"]

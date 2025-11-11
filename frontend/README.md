@@ -1,16 +1,19 @@
 # RAG Chatbot Frontend
 
-A modern chatbot interface built with React, Vite, TypeScript, Tailwind CSS, shadcn/ui, and Radix UI. This frontend integrates with the `common-ui` wrapper package.
+A production-ready chatbot interface built with React, Vite, TypeScript, and Tailwind CSS. Fully integrated with the RAG backend API for real-time AI-powered conversations.
 
-## Features
+## ✨ Features
 
-- 💬 Modern chat interface with message history
-- 🎨 Styled with Tailwind CSS and shadcn/ui components
-- 🌙 Dark mode support with CSS variables
-- 📜 Scrollable message area using Radix UI ScrollArea
-- ⌨️ Real-time message input with loading states
-- 🎭 User and assistant avatars with icons from lucide-react
-- 🔄 Auto-scroll to latest messages
+- 💬 **Real-time Chat** - Full integration with RAG backend API
+- 📚 **Source Citations** - Shows reference count for each AI response
+- 🎯 **Token Usage Tracking** - Visual gauge showing context window utilization (GPT-4 Turbo 128k)
+- 🔄 **Conversation Persistence** - Maintains conversation ID for multi-turn dialogues
+- 🎨 **Modern UI** - Beautiful interface with Tailwind CSS and Radix UI components
+- 🌙 **Dark Mode Support** - CSS variable-based theming
+- 📜 **Smooth Scrolling** - Auto-scroll to latest messages with Radix UI ScrollArea
+- ⌨️ **Loading States** - Visual feedback during API calls
+- 🎭 **User Avatars** - Distinct icons for user and assistant (Lucide React)
+- 🚀 **Production Ready** - Docker deployment with Nginx
 
 ## Tech Stack
 
@@ -141,73 +144,248 @@ The chatbot uses CSS variables for theming. You can customize colors in `src/ind
 
 ### Backend Integration
 
-The chatbot currently uses simulated responses. To integrate with a real backend:
+The chatbot is **fully integrated** with the RAG backend API. Here's how it works:
 
-1. Replace the `setTimeout` in `handleSubmit` with an actual API call
-2. Update the `assistantMessage` creation with the response from your backend
-3. Add error handling for API failures
+**API Configuration (`src/config.ts`):**
+```typescript
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
-Example:
-
-```tsx
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  if (!input.trim() || isLoading) return
-
-  const userMessage: Message = {
-    id: Date.now().toString(),
-    role: 'user',
-    content: input.trim(),
-    timestamp: new Date(),
-  }
-
-  setMessages((prev) => [...prev, userMessage])
-  setInput('')
-  setIsLoading(true)
-
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMessage.content }),
-    })
-    
-    const data = await response.json()
-    
-    const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: data.response,
-      timestamp: new Date(),
-    }
-    
-    setMessages((prev) => [...prev, assistantMessage])
-  } catch (error) {
-    console.error('Chat error:', error)
-    // Handle error appropriately
-  } finally {
-    setIsLoading(false)
-  }
+export const getApiUrl = (endpoint: string): string => {
+  // Handles both relative paths (Docker) and absolute URLs (development)
+  // Automatically adds https:// if protocol is missing
 }
 ```
 
+**Chat Flow:**
+1. User submits message
+2. Frontend sends POST request to `/api/chat`:
+   ```json
+   {
+     "message": "User's question",
+     "conversationId": "uuid-if-continuing-conversation"
+   }
+   ```
+3. Backend processes with RAG pipeline:
+   - Generates embedding for query
+   - Searches vector database for relevant documents
+   - Builds context with conversation history
+   - Generates AI response with GPT-4
+4. Backend returns response:
+   ```json
+   {
+     "success": true,
+     "data": {
+       "message": "AI response",
+       "conversationId": "uuid",
+       "sourceCount": 3,
+       "usage": {
+         "promptTokens": 500,
+         "completionTokens": 150,
+         "totalTokens": 650
+       }
+     }
+   }
+   ```
+5. Frontend displays response with source count and updates token gauge
+
+**Environment Variables:**
+- Development: `VITE_API_URL=http://localhost:3001`
+- Docker: Set as build arg in `docker-compose.yml`
+- Production (Render): Automatically set from backend service URL
+
 ## Available Scripts
 
-- `npm run dev` - Start development server
+- `npm run dev` - Start development server (Vite)
 - `npm run build` - Build for production
 - `npm run lint` - Run ESLint
-- `npm run preview` - Preview production build
+- `npm run preview` - Preview production build locally
 
-## Dependencies
+## 🚀 Production Deployment
 
-Key dependencies:
+### Docker Deployment
 
-- `react` & `react-dom` - React library
-- `@radix-ui/react-scroll-area` - Scrollable area component
-- `lucide-react` - Icons
-- `tailwindcss` - CSS framework
-- `common-ui` - Shared UI wrapper (local package)
+The frontend uses a two-stage Docker build:
 
-## License
+**Stage 1: Build**
+```bash
+# Builds React app with Vite
+# Requires VITE_API_URL as build arg
+docker build \
+  --build-arg VITE_API_URL=https://your-backend-url.com \
+  -f frontend/Dockerfile \
+  -t rag-frontend .
+```
 
-This project is part of the RAG Chatbot monorepo.
+**Stage 2: Serve**
+- Uses Nginx Alpine for minimal footprint
+- Serves static files from `/usr/share/nginx/html`
+- Custom nginx.conf for SPA routing
+
+**Run:**
+```bash
+docker run -p 3000:80 rag-frontend
+```
+
+### Deploy to Render.com
+
+Configured in root `render.yaml`:
+- Automatically pulls `VITE_API_URL` from backend service
+- Builds with correct API endpoint at build time
+- Serves via Nginx on port 80
+- Auto-deploy on git push
+
+See root `README.md` for detailed deployment instructions.
+
+### Build-Time vs Runtime Configuration
+
+**Important:** Vite requires environment variables at **build time**, not runtime.
+
+✅ **Correct (Build time):**
+```dockerfile
+ARG VITE_API_URL=https://api.example.com
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build
+```
+
+❌ **Incorrect (Runtime):**
+```dockerfile
+# This won't work - variables are baked into build
+RUN npm run build
+ENV VITE_API_URL=$VITE_API_URL
+```
+
+## 🎨 UI Components
+
+### Chatbot Component
+
+The main `Chatbot` component includes:
+- Message list with user/assistant distinction
+- Real-time loading indicators
+- Token usage visualization
+- Source citation badges
+- Auto-scrolling message area
+- Error handling with user feedback
+
+### Token Usage Gauge
+
+Visual indicator showing context window usage:
+- **Green**: 0-70% usage
+- **Yellow**: 70-90% usage  
+- **Red**: 90-100% usage
+
+Helps users understand when they're approaching the context limit (128k tokens for GPT-4 Turbo).
+
+## 🔧 Configuration
+
+### API URL Configuration
+
+The frontend uses `src/config.ts` for API configuration:
+
+```typescript
+// Development (local backend)
+VITE_API_URL=http://localhost:3001
+
+// Docker Compose (service networking)
+VITE_API_URL=http://backend:3001
+
+// Production (Render/other platforms)
+VITE_API_URL=https://your-backend-url.com
+```
+
+**Or use relative paths:**
+```typescript
+VITE_API_URL=  # Empty string uses relative paths
+```
+
+### Styling Customization
+
+Colors are defined in `src/index.css` using CSS variables:
+
+```css
+:root {
+  --background: 0 0% 100%;        /* White background */
+  --foreground: 222.2 84% 4.9%;   /* Dark text */
+  --primary: 221.2 83.2% 53.3%;   /* Blue primary color */
+  --muted: 210 40% 96.1%;         /* Light gray for assistant */
+  /* ... more variables */
+}
+
+.dark {
+  /* Dark mode overrides */
+}
+```
+
+## 📦 Dependencies
+
+**Core:**
+- `react` (18.x) - UI library
+- `react-dom` (18.x) - React DOM rendering
+
+**UI Components:**
+- `@radix-ui/react-scroll-area` - Accessible scrollable container
+- `lucide-react` - Icon library (Bot, User, Send icons)
+
+**Styling:**
+- `tailwindcss` - Utility-first CSS framework
+- `tailwindcss-animate` - Animation utilities
+- `tailwind-merge` - Merge Tailwind classes
+- `clsx` - Conditional class names
+
+**Monorepo:**
+- `common-ui` - Shared UI wrapper (local workspace package)
+
+**Dev Tools:**
+- `vite` - Build tool and dev server
+- `typescript` - Type safety
+- `eslint` - Code linting
+
+## 🐛 Troubleshooting
+
+**1. API connection errors:**
+```bash
+# Check VITE_API_URL is set correctly
+echo $VITE_API_URL
+
+# For development, should point to backend
+VITE_API_URL=http://localhost:3001
+```
+
+**2. Build failures:**
+```bash
+# Clear node_modules and reinstall
+rm -rf node_modules
+npm install
+
+# Ensure common-ui is built first
+npm run build -w common-ui
+```
+
+**3. Environment variables not working:**
+- Remember: Vite needs vars at **build time**
+- Must start with `VITE_` prefix
+- Rebuild after changing env vars
+
+**4. Nginx routing issues (Docker):**
+- Check `nginx.conf` includes SPA fallback:
+  ```nginx
+  try_files $uri $uri/ /index.html;
+  ```
+
+## 📚 Additional Documentation
+
+- Root `README.md` - Full project setup and deployment
+- `backend/README.md` - API documentation and backend details
+- `common-ui/README.md` - Shared component library
+
+## 🤝 Contributing
+
+Contributions welcome! Areas for improvement:
+- Additional UI components (file upload, voice input)
+- Markdown rendering for AI responses
+- Code syntax highlighting
+- Message search and filtering
+- Export conversation history
+
+## 📄 License
+
+This project is part of the RAG Chatbot monorepo. MIT License.
