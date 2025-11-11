@@ -1,0 +1,22 @@
+{
+  "name": "render-ai-examples-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "common-ui",
+    "rag-chatbot/backend",
+    "rag-chatbot/frontend"
+  ],
+  "scripts": {
+    "dev:common-ui": "npm run dev --workspace=common-ui",
+    "build:common-ui": "npm run build --workspace=common-ui",
+    "dev:backend": "npm run dev --workspace=rag-chatbot/backend",
+    "build:backend": "npm run build --workspace=rag-chatbot/backend",
+    "dev:frontend": "npm run dev --workspace=rag-chatbot/frontend",
+    "build:frontend": "npm run build --workspace=rag-chatbot/frontend"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
