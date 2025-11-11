@@ -1,6 +1,6 @@
 # RAG Chatbot Frontend
 
-A production-ready chatbot interface built with React, Vite, TypeScript, and Tailwind CSS. Fully integrated with the RAG backend API for real-time AI-powered conversations.
+A modern chatbot interface built with React, Vite, TypeScript, and Tailwind CSS. Fully integrated with the RAG backend API for real-time AI-powered conversations.
 
 ## ✨ Features
 
@@ -13,7 +13,7 @@ A production-ready chatbot interface built with React, Vite, TypeScript, and Tai
 - 📜 **Smooth Scrolling** - Auto-scroll to latest messages with Radix UI ScrollArea
 - ⌨️ **Loading States** - Visual feedback during API calls
 - 🎭 **User Avatars** - Distinct icons for user and assistant (Lucide React)
-- 🚀 **Production Ready** - Docker deployment with Nginx
+- 🚀 **Docker Support** - Containerized deployment with Nginx
 
 ## Tech Stack
 

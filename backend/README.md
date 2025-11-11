@@ -1,6 +1,6 @@
 # RAG Chatbot Backend
 
-Production-ready TypeScript/Express.js backend for the RAG-powered chatbot application with OpenAI integration, PostgreSQL vector database, and automatic migrations.
+TypeScript/Express.js backend for the RAG-powered chatbot application with OpenAI integration, PostgreSQL vector database, and automatic migrations.
 
 ## 🎯 Key Features
 
@@ -10,7 +10,7 @@ Production-ready TypeScript/Express.js backend for the RAG-powered chatbot appli
 - ✅ **Vector Search** - Fast semantic similarity search using PostgreSQL + pgvector
 - ✅ **Source Citations** - Track and return which documents informed each response
 - ✅ **Automatic Migrations** - Database schema automatically set up on deployment
-- ✅ **Production Ready** - Docker support, error handling, health checks
+- ✅ **Docker Support** - Containerized deployment, error handling, health checks
 
 ## Architecture
 
@@ -290,7 +290,7 @@ The application implements a complete Retrieval Augmented Generation (RAG) pipel
 
 ### Docker Deployment
 
-The backend includes production-ready Docker configuration with automatic migrations.
+The backend includes Docker configuration with automatic migrations.
 
 **Build and run:**
 ```bash

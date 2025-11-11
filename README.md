@@ -8,7 +8,7 @@ A full-stack Retrieval-Augmented Generation (RAG) chatbot example with OpenAI in
 - 💬 **Conversation History** - Persistent multi-turn conversations with context awareness
 - 📚 **Source Citations** - Shows which documents informed each response
 - 🎯 **Real-time Token Usage** - Visual context window usage tracking (GPT-4 Turbo 128k context)
-- 🚀 **Production-Ready** - Docker support, automated migrations, Render.com deployment config
+- 🚀 **Easy Deployment** - Docker support, automated migrations, Render.com deployment config
 - 🎨 **Modern UI** - Beautiful React interface with Tailwind CSS and Radix UI components
 - 📊 **Vector Search** - PostgreSQL with pgvector extension for fast similarity search
 
