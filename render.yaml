@@ -5,7 +5,7 @@ services:
     env: docker
     region: oregon
     plan: starter
-    dockerfilePath: ./rag-chatbot/backend/Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     dockerContext: ./
     healthCheckPath: /api/health
     envVars:
@@ -67,7 +67,7 @@ services:
     env: docker
     region: oregon
     plan: starter
-    dockerfilePath: ./rag-chatbot/frontend/Dockerfile
+    dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./
     envVars:
       - key: VITE_API_URL

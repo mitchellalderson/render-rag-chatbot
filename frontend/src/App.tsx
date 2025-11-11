@@ -1,4 +1,4 @@
-import { UIWrapper } from '@render-ai-templates/common-ui'
+import { UIWrapper } from '@render-rag-chatbot/common-ui'
 import { Chatbot } from './components/Chatbot'
 
 function App() {

@@ -26,8 +26,8 @@ services:
   # Backend API service
   backend:
     build:
-      context: ..
-      dockerfile: rag-chatbot/backend/Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: rag-chatbot-backend
     env_file:
       - .env.docker
@@ -62,8 +62,10 @@ services:
   # Frontend UI service
   frontend:
     build:
-      context: ..
-      dockerfile: rag-chatbot/frontend/Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3001
     container_name: rag-chatbot-frontend
     env_file:
       - .env.docker

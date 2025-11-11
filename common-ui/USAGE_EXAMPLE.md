@@ -5,8 +5,8 @@ This document provides practical examples of how to use the common-ui wrapper in
 ## Example 1: Simple AI Chatbot Interface
 
 ```tsx
-import { UIWrapper, Card, CardHeader, CardTitle, CardContent, Button } from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+import { UIWrapper, Card, CardHeader, CardTitle, CardContent, Button } from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function AIChatbot() {
   return (
@@ -47,8 +47,8 @@ import {
   CardDescription,
   CardContent,
   Button 
-} from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+} from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function RAGChatbot() {
   return (
@@ -94,8 +94,8 @@ import {
   CardTitle,
   CardContent,
   Button 
-} from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+} from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function ImageGenerator() {
   return (
@@ -130,8 +130,8 @@ function ImageGenerator() {
 ## Example 4: Custom Styling with Dark Mode
 
 ```tsx
-import { UIWrapper, Card, CardHeader, CardTitle, Button, cn } from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+import { UIWrapper, Card, CardHeader, CardTitle, Button, cn } from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 import { useState } from 'react'
 
 function CustomStyledApp() {
@@ -172,8 +172,8 @@ import {
   CardContent,
   CardFooter,
   Button 
-} from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+} from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function MultiStepWorkflow() {
   return (
@@ -231,7 +231,7 @@ Add the common-ui as a dependency in your AI project's `package.json`:
 ```json
 {
   "dependencies": {
-    "@render-ai-templates/common-ui": "workspace:*"
+    "@render-rag-chatbot/common-ui": "workspace:*"
   }
 }
 ```
@@ -240,7 +240,7 @@ Then run `npm install` from the root of the monorepo.
 
 ## Tips
 
-1. **Always import the styles**: Don't forget to import `'@render-ai-templates/common-ui/styles'` in your root component
+1. **Always import the styles**: Don't forget to import `'@render-rag-chatbot/common-ui/styles'` in your root component
 2. **Use the cn utility**: For conditional classes, use the `cn` utility function
 3. **Customize as needed**: The UIWrapper accepts className prop for custom styling
 4. **Responsive design**: All components are responsive by default

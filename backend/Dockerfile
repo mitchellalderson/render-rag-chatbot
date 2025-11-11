@@ -1,35 +1,42 @@
-# Build stage
+# Build stage for backend workspace
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy root package-lock.json and backend package files
-COPY package-lock.json ./
-COPY rag-chatbot/backend/package*.json ./
+# Copy root manifests (workspace-aware)
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+# Copy workspace manifests for better caching
+COPY backend/package.json ./backend/package.json
+COPY frontend/package.json ./frontend/package.json
+COPY common-ui/package.json ./common-ui/package.json
 
-# Copy source code
-COPY rag-chatbot/backend/ .
+# Install all dependencies at the monorepo root
+RUN npm ci --verbose
 
-# Build the application
-RUN npm run build
+# Copy source code needed to build the backend
+COPY backend ./backend
+
+# Build only the backend workspace
+RUN npm run build -w backend
 
 # Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy root package-lock.json and backend package files
-COPY package-lock.json ./
-COPY rag-chatbot/backend/package*.json ./
+# Copy root and backend package files
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/package.json
 
 # Install production dependencies only
-RUN npm ci --only=production
+RUN npm ci --omit=dev --verbose && npm cache clean --force
 
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
+# Copy compiled backend from builder
+COPY --from=builder /app/backend/dist ./backend/dist
+
+# Set working directory to backend
+WORKDIR /app/backend
 
 # Expose the application port
 EXPOSE 3001

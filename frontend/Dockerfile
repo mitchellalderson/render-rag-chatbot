@@ -1,45 +1,41 @@
 # Multi-stage build for React frontend
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
-# Set working directory
+# Set working directory at the monorepo root
 WORKDIR /app
 
-# Copy root package files for workspace
-COPY package*.json ./
+# Copy root package files (workspace-aware)
+COPY package.json package-lock.json ./
 
-# Copy common-ui package
+# Copy workspace package manifests only (better layer caching)
+COPY common-ui/package.json ./common-ui/package.json
+COPY frontend/package.json ./frontend/package.json
+# Also copy backend manifest so root install sees all declared workspaces
+COPY backend/package.json ./backend/package.json
+
+# Install all dependencies at the monorepo root
+RUN npm ci --verbose
+
+# Now copy the actual source code
 COPY common-ui ./common-ui
+COPY frontend ./frontend
 
-# Copy frontend package files
-COPY rag-chatbot/frontend/package*.json ./rag-chatbot/frontend/
-
-# Install dependencies from root (workspace aware)
-RUN npm ci
-
-# Copy frontend source code
-COPY rag-chatbot/frontend ./rag-chatbot/frontend
-
-# Build common-ui first
-WORKDIR /app/common-ui
-RUN npm run build
+# Build shared UI library first
+RUN npm run build -w common-ui
 
 # Build the frontend application
-WORKDIR /app/rag-chatbot/frontend
-
-# Accept VITE_API_URL as build argument
-ARG VITE_API_URL
+ARG VITE_API_URL=http://localhost:3001
 ENV VITE_API_URL=$VITE_API_URL
-
-RUN npm run build
+RUN npm run build -w frontend
 
 # Production stage - serve with nginx
 FROM nginx:alpine
 
 # Copy built assets from builder stage
-COPY --from=builder /app/rag-chatbot/frontend/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY rag-chatbot/frontend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80

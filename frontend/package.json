@@ -1,5 +1,5 @@
 {
-  "name": "rag-chatbot-frontend",
+  "name": "@render-rag-chatbot/frontend",
   "version": "1.0.0",
   "type": "module",
   "private": true,
@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@render-ai-templates/common-ui": "*",
+    "@render-rag-chatbot/common-ui": "*",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

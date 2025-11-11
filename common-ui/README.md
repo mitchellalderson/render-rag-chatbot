@@ -40,8 +40,8 @@ npm run build:common-ui
 The `UIWrapper` component provides a consistent layout foundation while allowing you to render your own content:
 
 ```tsx
-import { UIWrapper } from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+import { UIWrapper } from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function MyAIApp() {
   return (
@@ -66,8 +66,8 @@ import {
   CardTitle, 
   CardDescription, 
   CardContent 
-} from '@render-ai-templates/common-ui'
-import '@render-ai-templates/common-ui/styles'
+} from '@render-rag-chatbot/common-ui'
+import '@render-rag-chatbot/common-ui/styles'
 
 function MyAIApp() {
   return (
@@ -118,7 +118,7 @@ Example with props:
 - **cn** - Utility function for merging Tailwind CSS classes
 
 ```tsx
-import { cn } from '@render-ai-templates/common-ui'
+import { cn } from '@render-rag-chatbot/common-ui'
 
 const className = cn('base-class', condition && 'conditional-class', customClass)
 ```
@@ -176,7 +176,7 @@ The package uses CSS variables for theming, making it easy to customize colors:
 Full TypeScript support with exported types:
 
 ```tsx
-import type { UIWrapperProps, ButtonProps } from '@render-ai-templates/common-ui'
+import type { UIWrapperProps, ButtonProps } from '@render-rag-chatbot/common-ui'
 ```
 
 ## License

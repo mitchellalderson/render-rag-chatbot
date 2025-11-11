@@ -1,5 +1,5 @@
 {
-  "name": "@rag-chatbot/backend",
+  "name": "@render-rag-chatbot/backend",
   "version": "1.0.0",
   "description": "RAG-powered chatbot backend API",
   "main": "dist/index.js",
