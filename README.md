@@ -1,6 +1,6 @@
 # RAG Chatbot Monorepo
 
-A production-ready, full-stack Retrieval-Augmented Generation (RAG) chatbot with OpenAI integration. Built as an npm workspaces monorepo with TypeScript/Express backend, React/Vite frontend, PostgreSQL with pgvector, and a shared UI component library.
+A full-stack Retrieval-Augmented Generation (RAG) chatbot example with OpenAI integration. Built as an npm workspaces monorepo with TypeScript/Express backend, React/Vite frontend, PostgreSQL with pgvector, and a shared UI component library.
 
 ## ✨ Features
 
