@@ -2,8 +2,6 @@
 
 A full-stack Retrieval-Augmented Generation (RAG) chatbot example with OpenAI integration. Built as an npm workspaces monorepo with TypeScript/Express backend, React/Vite frontend, PostgreSQL with pgvector, and a shared UI component library.
 
-## 📋 Table of Contents
-
 - [Deploy to Render](#-deploy-to-render)
 - [Features](#-features)
 - [Repository Structure](#-repository-structure)
@@ -16,7 +14,7 @@ A full-stack Retrieval-Augmented Generation (RAG) chatbot example with OpenAI in
 
 ## 🚀 Deploy to Render
 
-This project is pre-configured for one-click deployment to Render.com using the included `render.yaml` blueprint.
+This project is pre-configured for one-click deployment to [Render](https://render.com/) using the included `render.yaml` blueprint.
 
 **What you get:**
 - ✅ Automatic database migrations on deployment
@@ -217,7 +215,6 @@ docker compose logs postgres
 
 - `backend/README.md` - Detailed backend documentation and API reference
 - `backend/SETUP.md` - PostgreSQL and pgvector setup guide
-- `backend/OPENAI_INTEGRATION.md` - OpenAI integration details and best practices
 - `frontend/README.md` - Frontend component documentation
 - `common-ui/README.md` - Shared UI component library docs
 
