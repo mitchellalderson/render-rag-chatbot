@@ -57,7 +57,7 @@ services:
       - key: EMBEDDING_DIMENSION
         value: 1536
       - key: SIMILARITY_THRESHOLD
-        value: 0.2
+        value: 0.1
       - key: MAX_SOURCES
         value: 5
       - key: RUN_SEED
