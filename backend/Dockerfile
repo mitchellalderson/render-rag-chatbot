@@ -35,6 +35,9 @@ RUN npm ci --omit=dev --verbose && npm cache clean --force
 # Copy compiled backend from builder
 COPY --from=builder /app/backend/dist ./backend/dist
 
+# Copy docs directory for seeding
+COPY backend/src/db/docs ./backend/dist/db/docs
+
 # Copy startup script
 COPY backend/start.sh ./backend/start.sh
 RUN chmod +x ./backend/start.sh

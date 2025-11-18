@@ -10,11 +10,7 @@
     "lint": "eslint src --ext .ts",
     "type-check": "tsc --noEmit",
     "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts",
-    "db:seed:embeddings": "tsx src/db/seed-embeddings.ts",
-    "db:cleanup": "tsx src/db/cleanup-null-embeddings.ts",
-    "db:inspect": "tsx src/db/inspect-embeddings.ts",
-    "db:test-search": "tsx src/db/test-vector-search.ts"
+    "db:seed": "tsx src/db/seed-embeddings.ts"
   },
   "dependencies": {
     "express": "^4.18.2",

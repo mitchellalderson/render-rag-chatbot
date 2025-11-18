@@ -50,6 +50,9 @@ services:
       EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-1536}
       SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.2}
       MAX_SOURCES: ${MAX_SOURCES:-5}
+      # Set to 'true' to automatically seed database with markdown docs on startup
+      # Warning: This will incur OpenAI API costs for generating embeddings
+      RUN_SEED: ${RUN_SEED:-true}
     ports:
       - "3001:3001"
     depends_on:

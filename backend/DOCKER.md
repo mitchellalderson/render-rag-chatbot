@@ -41,6 +41,7 @@ This guide explains how to run the RAG Chatbot backend using Docker Compose.
    - Build the backend application
    - Start both services with proper networking
    - Create a persistent volume for the database
+   - **Automatically run database migrations** on backend startup
 
 4. **Check service status**
 
@@ -63,9 +64,11 @@ This guide explains how to run the RAG Chatbot backend using Docker Compose.
 
 ## Database Management
 
-### Run Migrations
+### Automatic Migrations
 
-After the first startup, you need to run database migrations:
+Database migrations run automatically when the backend container starts via the `start.sh` script. You don't need to run them manually!
+
+If you need to run migrations manually for any reason:
 
 ```bash
 docker-compose exec backend npm run db:migrate
@@ -73,8 +76,25 @@ docker-compose exec backend npm run db:migrate
 
 ### Seed Database (Optional)
 
-To populate the database with sample data:
+You have two options for seeding the database with the 15 AI/ML documentation files:
 
+**Option 1: Automatic seeding on startup (requires rebuild)**
+
+Set the `RUN_SEED` environment variable in your `.env` or `docker-compose.yml`:
+```bash
+RUN_SEED=true
+```
+
+Then restart:
+```bash
+docker-compose up -d --build backend
+```
+
+⚠️ **Note:** This will incur OpenAI API costs (~$0.01-0.02) for generating embeddings.
+
+**Option 2: Manual seeding**
+
+Run the seed command manually after startup:
 ```bash
 docker-compose exec backend npm run db:seed
 ```

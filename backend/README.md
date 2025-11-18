@@ -22,7 +22,8 @@ src/
 ├── db/
 │   ├── config.ts         # PostgreSQL connection pool
 │   ├── migrate.ts        # Database migrations
-│   └── seed.ts           # Sample data seeding
+│   ├── seed-embeddings.ts # Database seeding from markdown docs
+│   └── docs/             # Markdown documentation files for seeding
 ├── middleware/
 │   └── errorHandler.ts   # Global error handling
 ├── models/
@@ -94,13 +95,17 @@ npm run db:migrate
 
 ### 5. (Optional) Seed Sample Data
 
-```bash
-# Seed basic documents
-npm run db:seed
+The backend includes 15 comprehensive markdown documents about AI and machine learning topics in `src/db/docs/`. These will be automatically embedded and seeded into your vector database.
 
-# Generate embeddings for seeded documents
-npm run db:seed:embeddings
+```bash
+# Seed database with markdown documents (includes embedding generation)
+npm run db:seed
 ```
+
+To add custom knowledge:
+1. Add markdown files to `src/db/docs/`
+2. Run the seed command
+3. The script will automatically process all `.md` files
 
 ### 6. Start Development Server
 
@@ -120,12 +125,13 @@ npm run build
 npm start
 ```
 
-**Note:** In Docker, the `start.sh` script handles both migrations and server startup:
+**Note:** In Docker, the `start.sh` script handles migrations, optional seeding, and server startup:
 ```bash
 # Runs automatically in container
 ./start.sh
 # 1. Runs migrations: node dist/db/migrate.js
-# 2. Starts server: node dist/index.js
+# 2. (Optional) Seeds database: node dist/db/seed-embeddings.js (if RUN_SEED=true)
+# 3. Starts server: node dist/index.js
 ```
 
 ## API Reference
@@ -338,7 +344,13 @@ OPENAI_TEMPERATURE=0.7
 OPENAI_MAX_TOKENS=1000
 SIMILARITY_THRESHOLD=0.2
 MAX_SOURCES=5
+RUN_SEED=false  # Set to 'true' to auto-seed database on startup (incurs OpenAI costs)
 ```
+
+**Note on Automatic Seeding:**
+- Set `RUN_SEED=true` to automatically seed the database with the 15 markdown documents in `src/db/docs/` on container startup
+- ⚠️ This will generate embeddings using OpenAI API and incur costs (~$0.01-0.02 per run)
+- Database migrations always run automatically; seeding is optional and disabled by default
 
 ## 📊 Current Status
 

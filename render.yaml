@@ -60,6 +60,8 @@ services:
         value: 0.2
       - key: MAX_SOURCES
         value: 5
+      - key: RUN_SEED
+        value: true
 
   # Frontend UI service
   - type: web
