@@ -2,7 +2,7 @@ services:
   # Backend API service
   - type: web
     name: rag-chatbot-backend
-    env: docker
+    runtime: docker
     region: oregon
     plan: starter
     dockerfilePath: ./backend/Dockerfile
@@ -66,7 +66,7 @@ services:
   # Frontend UI service
   - type: web
     name: rag-chatbot-frontend
-    env: docker
+    runtime: docker
     region: oregon
     plan: starter
     dockerfilePath: ./frontend/Dockerfile
