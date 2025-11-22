@@ -1,5 +1,5 @@
 projects:
-  - name: my-project
+  - name: rag-chatbot-example
     environments:
       - name: production
         services:
